@@ -65,7 +65,7 @@ pom.xml.versionsBackup
 pom.xml.next
 release.properties
 
-.mvn/
+#.mvn/
 
 ### Eclipse template
 *.pydevproject
@@ -119,8 +119,14 @@ local.properties
 ### js from ts
 **/wc/src/app/**/*.js
 !**/wc/src/app/transfer.js
+!**/wc/src/app/parts.js
+!**/wc/src/app/iconProvider.js
+!**/wc/src/app/default-parts.js
+!**/wc/src/app/default-menus.js
+!**/wc/src/app/area-default.js
 !**/wc/src/app/nls/**/*.js
 !**/wc/src/app/vendor/**/*.js
 !**/wc/src/app/domain/model.js
+!**/wc/src/app/domain/model-meta-ext.js
 !**/wc/src/app/domain/nls/resources.js
 **/wc/src/modules/**/*.js
