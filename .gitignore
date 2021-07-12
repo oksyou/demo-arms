@@ -110,6 +110,7 @@ local.properties
 
 ### Автогенерируемые ресурсы для WebClient
 **/wc/**/*.css
+!**/wc/src/app/ui/styles/generic.css
 **/wc/src/app/domain/nls/en/resources.js
 **/wc/src/app/domain/nls/ru/resources.js
 *.js.map
