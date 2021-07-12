@@ -1,0 +1,30 @@
+{
+  "extends": "./node_modules/@croc/webclient/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "app/*": [
+        "src/app/*"
+      ],
+      "lib/*": [
+        "node_modules/@croc/webclient/src/lib/*"
+      ],
+      "modules/*": [
+        "node_modules/@croc/webclient/src/modules/*"
+      ],
+      "vendor/*": [
+        "node_modules/@croc/webclient/dist/vendor/*"
+      ],
+      "vendor/gridstack/*": [
+        "node_modules/gridstack/dist/*"
+      ],
+      "gridstack": [
+        "node_modules/gridstack/dist/gridstack"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/.*.ts"
+  ]
+}

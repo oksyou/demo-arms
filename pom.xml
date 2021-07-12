@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ru.croc.ctp.demo</groupId>
+	<artifactId>demo-arms</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<properties>
+		<ctp.version>1.9.6</ctp.version>
+		<xtend.version>2.19.0</xtend.version>
+		<generator-webclient.version>@~1.39</generator-webclient.version> <!-- example: @~1.34 -->
+		<maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
+		<frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
+		<frontend-maven-plugin.nodeVersion>v12.13.1</frontend-maven-plugin.nodeVersion>
+		<frontend-maven-plugin.npmVersion>6.13.1</frontend-maven-plugin.npmVersion>
+		<buildWCInDev>true</buildWCInDev>
+		<checkstyle.skip>true</checkstyle.skip>
+	</properties>
+
+	<parent>
+		<groupId>ru.croc.ctp</groupId>
+		<artifactId>build-parent</artifactId>
+		<version>1.9.6</version>
+	</parent>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>ru.croc.ctp</groupId>
+				<artifactId>jxfw-bom</artifactId>
+				<version>${ctp.version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+            		<groupId>com.h2database</groupId>
+            		<artifactId>h2</artifactId>
+            		<scope>runtime</scope>
+        	</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ru.croc.ctp</groupId>
+			<artifactId>jxfw-wc-loader</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ru.croc.ctp</groupId>
+			<artifactId>jxfw-jpa-compile</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ru.croc.ctp</groupId>
+			<artifactId>jxfw-cli</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.jadira.usertype</groupId>
+			<artifactId>usertype.core</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.xtend</groupId>
+				<artifactId>xtend-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>ru.croc.ctp</groupId>
+				<artifactId>wcgen-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>apt-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${maven-checkstyle-plugin.version}</version>
+				<configuration>
+					<configLocation>CrocCheckStyleV8.xml</configLocation>
+					<encoding>UTF-8</encoding>
+					<consoleOutput>true</consoleOutput>
+					<violationSeverity>warning</violationSeverity>
+					<linkXRef>false</linkXRef>
+				</configuration>
+				<executions>
+					<execution>
+						<id>validate</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>${frontend-maven-plugin.version}</version>
+				<configuration>
+					<installDirectory>wc</installDirectory>
+					<workingDirectory>wc</workingDirectory>
+					<skip>${backEndOnly}</skip>
+				</configuration>
+				<executions>
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>${frontend-maven-plugin.nodeVersion}</nodeVersion>
+							<npmVersion>${frontend-maven-plugin.npmVersion}</npmVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>[wc] install npm dependencies</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>[wc] generate typescript model classes</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<phase>process-classes</phase>
+						<configuration>
+							<arguments>run model-classes</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>[wc] grunt build</id>
+						<goals>
+							<goal>grunt</goal>
+						</goals>
+						<phase>process-classes</phase>
+						<configuration>
+							<skip>${buildWCInProd}</skip>
+							<arguments>build --target=${project.build.directory}</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>[wc] grunt build prod</id>
+						<goals>
+							<goal>grunt</goal>
+						</goals>
+						<phase>process-classes</phase>
+						<configuration>
+							<skip>${buildWCInDev}</skip>
+							<arguments>build:prod --target=${project.build.directory}</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
