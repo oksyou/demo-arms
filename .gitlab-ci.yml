@@ -15,4 +15,4 @@ build:
       - wc/node
       - wc/node_modules
   script:
-    - mvnw $MAVEN_CLI_OPTS -Dmaven.repo.local=$MAVEN_REPO_LOCAL package
+    - ./mvnw $MAVEN_CLI_OPTS -Dmaven.repo.local=$MAVEN_REPO_LOCAL package
