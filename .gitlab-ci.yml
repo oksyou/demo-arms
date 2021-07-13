@@ -15,5 +15,4 @@ build:
       - wc/node
       - wc/node_modules
   script:
-    - echo "Hello!"
-    - mvn $MAVEN_CLI_OPTS -Dmaven.repo.local=$MAVEN_REPO_LOCAL package
+    - mvnw $MAVEN_CLI_OPTS -Dmaven.repo.local=$MAVEN_REPO_LOCAL package
