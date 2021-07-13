@@ -7,7 +7,7 @@ variables:
 
 build:
   stage: build
-  image: mavenliberica-openjdk-centos:8u292
+  image: liberica-openjdk-centos:8u292
   cache:
     key: ${CI_PROJECT_NAME}
     paths:
