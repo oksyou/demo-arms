@@ -1,0 +1,19 @@
+stages:
+  - build
+
+variables:
+  MAVEN_CLI_OPTS: --batch-mode --errors --fail-at-end --show-version
+  MAVEN_REPO_LOCAL: .m2/repository
+
+build:
+  stage: build
+  image: "maven:3.5.4-jdk-8-alpine"
+  cache:
+    key: ${CI_PROJECT_NAME}
+    paths:
+      - $MAVEN_REPO_LOCAL
+      - wc/node
+      - wc/node_modules
+  script:
+    - echo "Hello!"
+    - mvn $MAVEN_CLI_OPTS package
